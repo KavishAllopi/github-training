@@ -5,10 +5,10 @@ on:
   
   push:
     branches: [ "main" ]
+    paths-ignore: [ ".github/**" ]
     
   pull_request:
     branches: [ "main" ]
-    paths-ignore: [ ".github/**" ]
     
   schedule:
     - cron: "15 6 * * sun"
@@ -18,16 +18,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-
-      # Runs a single command using the runners shell
-      - name: Output Name of Triggering Event
-        run: echo "The event was:" ${{ github.event_name }} 
-
-      # Runs a set of commands using the runners shell
-      - name: Output Branch Name
-        run: echo "The branch name is:" ${GITHUB_REF##*/}
+      - run: |
+          echo "🎉 The job was triggered by event: ${{ github.event_name }}"
+          echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ."
         
-      - name: List All Repo Files
-        run:  |
-          echo "The files listed as follows:"
-          ls
+      - uses: actions/checkout@v3.0.2
+
+      - name: List files in the repository
+        run: |
+          echo "The repository ${{ github.repository }} contains the following files:"
+          tree
